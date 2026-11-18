@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.LumiNest" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/luminest_background</item>
+        <item name="android:statusBarColor">@color/luminest_background</item>
+        <item name="android:navigationBarColor">@color/luminest_background</item>
+    </style>
+
+    <style name="Theme.LumiNest.Splash" parent="Theme.LumiNest">
+        <item name="android:windowBackground">@drawable/luminest_splash</item>
+    </style>
+</resources>

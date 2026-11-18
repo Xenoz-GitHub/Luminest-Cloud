@@ -1,0 +1,95 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Signing secrets live in android/local.properties (gitignored) or in
+// LUMINEST_STORE_PASSWORD / LUMINEST_KEY_PASSWORD. Never hardcode them here:
+// this file is tracked by Git while the keystore itself is not.
+def localProps = new Properties()
+def localPropsFile = rootProject.file("local.properties")
+if (localPropsFile.exists()) {
+    localPropsFile.withInputStream { localProps.load(it) }
+}
+
+def releaseStorePassword =
+    localProps.getProperty("luminest.storePassword") ?:
+    System.getenv("LUMINEST_STORE_PASSWORD")
+def releaseKeyPassword =
+    localProps.getProperty("luminest.keyPassword") ?:
+    System.getenv("LUMINEST_KEY_PASSWORD")
+def releaseKeyAlias =
+    localProps.getProperty("luminest.keyAlias") ?: "luminest"
+
+def buildingRelease = gradle.startParameter.taskNames.any {
+    it.toLowerCase().contains("release")
+}
+if (buildingRelease && (!releaseStorePassword || !releaseKeyPassword)) {
+    throw new GradleException(
+        "Missing Android signing secrets. Add luminest.storePassword and " +
+        "luminest.keyPassword to android/local.properties, or set " +
+        "LUMINEST_STORE_PASSWORD and LUMINEST_KEY_PASSWORD, then rebuild."
+    )
+}
+
+android {
+    namespace 'app.luminest.twa'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "app.luminest.twa"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../../android-keys/luminest-release.jks")
+            storePassword releaseStorePassword
+            keyAlias releaseKeyAlias
+            keyPassword releaseKeyPassword
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+        debug {
+            applicationIdSuffix ".debug"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError false
+    }
+}
+
+// androidbrowserhelper 2.5.0 declares kotlin-stdlib-jdk8:1.6.21 while other
+// transitive dependencies pull kotlin-stdlib:1.8.22. Since Kotlin 1.8 the
+// jdk7/jdk8 artifacts are merged into kotlin-stdlib, so mixing versions puts
+// the same classes on the classpath twice and AGP fails with
+// "Duplicate class kotlin.collections.jdk8.CollectionsJDK8Kt".
+//
+// Forcing every Kotlin stdlib artifact to the same 1.8.22 release makes the
+// jdk7/jdk8 modules empty stubs, which resolves the conflict without removing
+// any real code.
+configurations.all {
+    resolutionStrategy {
+        force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22'
+        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+    }
+}
+
+dependencies {
+    implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+}

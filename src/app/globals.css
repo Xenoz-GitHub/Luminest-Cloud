@@ -1,0 +1,481 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 255 252 255;
+  --surface: 255 255 255;
+  --surface-2: 247 242 255;
+  --ink: 80 68 101;
+  --muted: 147 136 165;
+  --line: 233 224 245;
+
+  /* Accent (default: lavender). Overridden by [data-accent="..."] below. */
+  --accent: 185 165 234;
+  --accent-soft: 217 204 245;
+  --accent-deep: 139 114 201;
+  --accent-ink: 61 49 83;
+}
+
+[data-accent="rose"] {
+  --accent: 244 164 185;
+  --accent-soft: 252 213 224;
+  --accent-deep: 214 106 134;
+  --accent-ink: 92 32 52;
+}
+
+[data-accent="burgundy"] {
+  --accent: 168 74 98;
+  --accent-soft: 220 160 175;
+  --accent-deep: 126 44 64;
+  --accent-ink: 255 245 247;
+}
+
+[data-accent="gold"] {
+  --accent: 232 190 106;
+  --accent-soft: 246 224 178;
+  --accent-deep: 190 146 55;
+  --accent-ink: 74 52 12;
+}
+
+[data-accent="emerald"] {
+  --accent: 122 200 164;
+  --accent-soft: 189 233 212;
+  --accent-deep: 76 158 121;
+  --accent-ink: 17 61 43;
+}
+
+[data-accent="ocean"] {
+  --accent: 126 176 224;
+  --accent-soft: 189 219 243;
+  --accent-deep: 76 128 184;
+  --accent-ink: 18 48 78;
+}
+
+[data-accent="cherry"] {
+  --accent: 236 124 124;
+  --accent-soft: 249 196 196;
+  --accent-deep: 199 76 76;
+  --accent-ink: 80 24 24;
+}
+
+[data-accent="slate"] {
+  --accent: 148 158 178;
+  --accent-soft: 203 209 221;
+  --accent-deep: 104 114 136;
+  --accent-ink: 30 38 52;
+}
+
+.dark {
+  --background: 24 20 35;
+  --surface: 35 28 50;
+  --surface-2: 45 37 64;
+  --ink: 244 238 255;
+  --muted: 178 166 199;
+  --line: 65 54 88;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  max-width: 100vw;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  color: rgb(var(--ink));
+  background-color: rgb(var(--background));
+  background-image: radial-gradient(
+      900px 500px at 8% -10%,
+      rgba(185, 165, 234, 0.2),
+      transparent 60%
+    ),
+    radial-gradient(
+      800px 460px at 100% 0%,
+      rgba(220, 235, 250, 0.4),
+      transparent 55%
+    ),
+    radial-gradient(
+      720px 420px at 50% 110%,
+      rgba(247, 220, 232, 0.32),
+      transparent 60%
+    );
+  background-attachment: fixed;
+  min-height: 100dvh;
+  font-feature-settings: "ss01", "cv01";
+}
+
+.dark body {
+  background-image: radial-gradient(
+      900px 500px at 8% -10%,
+      rgba(139, 114, 201, 0.25),
+      transparent 60%
+    ),
+    radial-gradient(
+      800px 460px at 100% 0%,
+      rgba(78, 107, 143, 0.18),
+      transparent 55%
+    ),
+    radial-gradient(
+      720px 420px at 50% 110%,
+      rgba(120, 78, 102, 0.16),
+      transparent 60%
+    );
+}
+
+::selection {
+  background: rgba(185, 165, 234, 0.45);
+  color: #504465;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(147, 136, 165, 0.3);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(147, 136, 165, 0.5);
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid #b9a5ea;
+  outline-offset: 2px;
+}
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+  .dark .glass {
+    background: rgba(35, 28, 50, 0.72);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgba(185, 165, 234, 0.16);
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.45),
+      transparent
+    );
+    animation: shimmer 1.6s infinite;
+  }
+}
+
+/* ----------------------------------------------------------------
+ * Static boot fallback
+ * Rendered inline by layout.tsx, hidden the moment React mounts. If the app
+ * cannot boot (old browser, dead chunk), the user sees a message and a link
+ * instead of a blank white screen.
+ * ---------------------------------------------------------------- */
+#boot-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: grid;
+  place-items: center;
+  background: #fffcff;
+  padding: 24px;
+  text-align: center;
+  color: #504465;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+#boot-fallback .bf-dot {
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 14px;
+  border-radius: 14px;
+  background: #d9ccf5;
+  color: #3d3153;
+  font-weight: 800;
+  line-height: 46px;
+  font-size: 19px;
+}
+
+#boot-fallback .bf-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+#boot-fallback .bf-sub {
+  font-size: 13px;
+  color: #9388a5;
+  margin: 0 0 14px;
+  max-width: 280px;
+}
+
+#boot-fallback .bf-link {
+  display: inline-block;
+  padding: 11px 20px;
+  border-radius: 999px;
+  border: 2px solid #e9e0f5;
+  background: #fff;
+  color: #504465;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+html.app-ready #boot-fallback {
+  display: none;
+}
+
+/* ----------------------------------------------------------------
+ * Viewport unit fallbacks
+ * Chrome below 108 silently drops dvh declarations, which collapses any
+ * min-h-dvh container to zero height — a blank page with no error.
+ * ---------------------------------------------------------------- */
+@supports not (min-height: 100dvh) {
+  .min-h-dvh {
+    min-height: 100vh;
+  }
+}
+
+/* ----------------------------------------------------------------
+ * Boot splash (installed app only)
+ * The inline script in layout.tsx adds .pwa-standalone before paint, so web
+ * visitors never see this. It fades out once the app has mounted.
+ * ---------------------------------------------------------------- */
+#boot-splash {
+  display: none;
+}
+
+html.pwa-standalone #boot-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: rgb(var(--background));
+  background-image: radial-gradient(
+      900px 500px at 50% -10%,
+      rgb(var(--accent) / 0.28),
+      transparent 62%
+    ),
+    radial-gradient(
+      700px 420px at 50% 110%,
+      rgb(var(--accent-soft) / 0.5),
+      transparent 60%
+    );
+  opacity: 1;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+html.boot-splash-done #boot-splash {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.boot-splash__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.boot-splash__glow {
+  position: absolute;
+  height: 15rem;
+  width: 15rem;
+  border-radius: 999px;
+  background: rgb(var(--accent) / 0.35);
+  filter: blur(56px);
+  animation: boot-pulse 2.4s ease-in-out infinite;
+}
+
+.boot-splash__mascot {
+  position: relative;
+  height: 8.5rem;
+  width: 8.5rem;
+  animation: boot-float 2.2s ease-in-out infinite;
+}
+
+.boot-splash__title {
+  position: relative;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: rgb(var(--ink));
+  animation: boot-rise 0.5s ease both;
+}
+
+.boot-splash__bar {
+  position: relative;
+  height: 0.3rem;
+  width: 7rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(var(--accent) / 0.22);
+}
+
+.boot-splash__bar span {
+  display: block;
+  height: 100%;
+  width: 40%;
+  border-radius: 999px;
+  background: rgb(var(--accent-deep));
+  animation: boot-slide 1.15s ease-in-out infinite;
+}
+
+@keyframes boot-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-9px) scale(1.02); }
+}
+@keyframes boot-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.07); }
+}
+@keyframes boot-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes boot-slide {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(320%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-splash__mascot,
+  .boot-splash__glow,
+  .boot-splash__title,
+  .boot-splash__bar span {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ----------------------------------------------------------------
+ * Mobile scroll performance
+ * A fixed-attachment gradient repaints on every scroll frame, which is one of
+ * the most common causes of janky scrolling on entry-level phones. Phones and
+ * tablets get the cheaper scrolling behaviour; desktop keeps the effect.
+ * ---------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  body {
+    background-attachment: scroll;
+  }
+}
+
+/* ----------------------------------------------------------------
+ * Performance Mode  (<html data-perf="lite">)
+ *
+ * Set by the inline boot script before first paint, so there is no flash.
+ * Everything here is purely decorative: layout, typography, contrast, focus
+ * rings, navigation and every interaction are untouched.
+ * ---------------------------------------------------------------- */
+
+/* A. Remove decorative motion. Layout-affecting animation is the most
+ *    expensive thing on a low-end GPU. */
+html[data-perf="lite"] *,
+html[data-perf="lite"] *::before,
+html[data-perf="lite"] *::after {
+  animation: none !important;
+  transition-duration: 90ms !important;
+  transition-delay: 0ms !important;
+}
+
+/* B. Drop the expensive compositing effects. Backdrop blur forces the browser
+ *    to re-sample everything behind an element on every paint. */
+html[data-perf="lite"] [class*="backdrop-blur"] {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Decorative glows keep their softness but at a fraction of the blur radius
+ * (blur cost grows with radius, so this is a large saving). */
+html[data-perf="lite"] [class~="blur-2xl"],
+html[data-perf="lite"] [class~="blur-3xl"] {
+  filter: blur(6px) !important;
+  opacity: 0.5 !important;
+}
+
+/* Flatten the widest shadows into a cheap, still-visible edge. */
+html[data-perf="lite"] [class*="shadow-float"],
+html[data-perf="lite"] [class*="shadow-panel"],
+html[data-perf="lite"] [class*="shadow-soft"] {
+  box-shadow: 0 2px 6px -3px rgba(80, 68, 101, 0.22) !important;
+}
+
+/* No animated gradient drift while scrolling. */
+html[data-perf="lite"] body {
+  background-attachment: scroll;
+}
+
+/* Keep the focus ring obvious for keyboard users in both modes. */
+html[data-perf="lite"] :focus-visible {
+  outline: 2px solid #b9a5ea;
+  outline-offset: 2px;
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.luminest.twa",
+      "sha256_cert_fingerprints": [
+        "17:61:04:7E:73:35:F9:DD:B3:42:DB:F6:1C:53:9B:8E:16:D4:D8:FB:21:3C:96:88:0B:5B:FF:05:C1:6A:2D:9C"
+      ]
+    }
+  }
+]

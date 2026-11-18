@@ -1,0 +1,20 @@
+# Local secrets — never upload these. Vercel env vars are configured remotely.
+.env
+.env.*
+
+# Local build output and caches
+.next
+node_modules
+tsconfig.tsbuildinfo
+
+# Local Android tooling and scratch material
+android
+android-tools
+android-keys
+Expressions-ihave
+notes
+.agents
+.kiro
+
+# Vercel CLI metadata
+.vercel
